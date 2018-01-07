@@ -9,7 +9,9 @@ bot = telebot.TeleBot(token)
 
 @bot.message_handler(content_types=["text"])
 def recieve_messages(message):
-    page = html.document_fromstring(requests.get('http://flibusta.is/').content)
+    page = requests.get('http://flibusta.is/').content
+    print(page)
+    page = html.document_fromstring(page)
     title = page.cssselect('title')[0].text_content()
 
     bot.send_message(message.chat.id, title)
