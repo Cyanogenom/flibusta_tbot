@@ -20,6 +20,7 @@ def recieve_messages(message):
             if 'Найденные книги' in elem.cssselect('h3')[0].text_content():
                 ans = elem.cssselect('li')[0].text_content()
     except:
+        bot.send_message(message.chat.id, 'error')
         ans = None
 
     bot.send_message(message.chat.id, ans)
