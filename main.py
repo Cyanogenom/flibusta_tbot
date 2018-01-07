@@ -9,13 +9,21 @@ bot = telebot.TeleBot(token)
 
 @bot.message_handler(content_types=["text"])
 def recieve_messages(message):
-    page = requests.get('http://flibusta.is/').content
-    print(page)
-    page = html.document_fromstring(page)
-    title = page.cssselect('title')[0].text_content()
+    try:
+        params = {
+            'ask': 'сталкер'
+        }
+        page = html.document_fromstring(requests.get('http://flibusta.is/booksearch?ask=', params=params).content)
+        data = page.cssselect('div#main ul')
+        ans = []
+        for elem in data:
+            if 'Найденные книги' in elem.cssselect('h3')[0].text_content():
+                ans = elem.cssselect('li')[0].text_content()
+    except:
+        ans = None
 
-    bot.send_message(message.chat.id, title)
-    print(message.chat.id, message.text, title)
+    bot.send_message(message.chat.id, ans)
+    print(message.chat.id, message.text, ans)
 
 
 if __name__ == '__main__':
