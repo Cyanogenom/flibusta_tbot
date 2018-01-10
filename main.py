@@ -100,7 +100,7 @@ def recieve_messages(message):
         else:
             bot.send_message(message.chat.id, 'Ничего не нашлось :/')
     else:
-        bot.send_message(message.chat.id, 'Произошла какая-то ужасная ошибка :/. Попробуйте снова.')
+        bot.send_message(message.chat.id, 'Произошла какая-то ужасная ошибка :/. Попробуйте снова. (code=0)')
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -115,11 +115,11 @@ def callback_inline(call):
             file.close()
             os.remove('file.' + extension)
         except:
-            bot.send_message(call.from_user.id, 'Произошла какая-то ужасная ошибка :/. Попробуйте снова.')
+            bot.send_message(call.from_user.id, 'Произошла какая-то ужасная ошибка :/. Попробуйте снова. (code=1)')
 
     elif call.data.split('_||_')[0] == 'more':
         data = call.data.split('_||_')
-        answ, urls, more_button_data, error = find_books(data[1], data[2], data[3])
+        answ, urls, more_button_data, error = find_books(data[1], int(data[2]), int(data[3]))
 
         if not error:
             for idx, i in enumerate(answ):
@@ -136,7 +136,7 @@ def callback_inline(call):
                        str(int(more_button_data.split('_||_')[3])+1)
                 bot.send_message(call.from_user.id, text, reply_markup=keyboard)
         else:
-            bot.send_message(call.from_user.id, 'Произошла какая-то ужасная ошибка :/. Попробуйте снова.')
+            bot.send_message(call.from_user.id, 'Произошла какая-то ужасная ошибка :/. Попробуйте снова. (code=2)')
 
     else:
         try:
@@ -161,7 +161,7 @@ def callback_inline(call):
                         keyboard.add(button)
             bot.send_message(call.from_user.id, 'Выберите формат:', reply_markup=keyboard)
         except:
-            bot.send_message(call.from_user.id, 'Произошла какая-то ужасная ошибка :/. Попробуйте снова.')
+            bot.send_message(call.from_user.id, 'Произошла какая-то ужасная ошибка :/. Попробуйте снова. (code=3)')
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
